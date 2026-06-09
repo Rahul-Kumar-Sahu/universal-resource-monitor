@@ -1,0 +1,17 @@
+{
+  "name": "universal-resource-monitor",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Standalone resource profiling and server metrics platform",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server/index.js",
+    "agent": "node src/agent/index.js",
+    "test": "node --test",
+    "check": "node --check src/server/index.js && node --check src/server/app.js && node --check src/server/store.js && node --check src/shared/loadEnv.js && node --check src/agent/index.js && node --check src/agent/collector.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}

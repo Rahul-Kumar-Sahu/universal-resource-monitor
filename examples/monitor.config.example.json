@@ -1,0 +1,18 @@
+{
+  "serverUrl": "http://localhost:8080",
+  "projectKey": "paste-project-key-here",
+  "agentName": "Production Server",
+  "intervalSeconds": 30,
+  "requestTimeoutMs": 5000,
+  "diskPath": "/",
+  "services": [
+    {
+      "name": "Application",
+      "url": "http://127.0.0.1:3000"
+    },
+    {
+      "name": "API Health",
+      "url": "http://127.0.0.1:4000/api/health"
+    }
+  ]
+}

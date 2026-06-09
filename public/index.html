@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Universal Resource Monitor</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Developer Operations</p>
+        <h1>Resource Monitor</h1>
+      </div>
+      <div class="topbar-actions">
+        <span id="connectionBadge" class="badge neutral">Not connected</span>
+        <button id="settingsButton" class="button secondary">Admin Token</button>
+        <button id="addProjectButton" class="button primary">Add Project</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">All connected systems</p>
+          <h2>Server health, without opening every project.</h2>
+          <p>
+            CPU, memory, disk and service availability from one central dashboard.
+          </p>
+        </div>
+        <div class="summary-grid">
+          <article><strong id="projectCount">0</strong><span>Projects</span></article>
+          <article><strong id="onlineCount">0</strong><span>Online Agents</span></article>
+          <article><strong id="warningCount">0</strong><span>Warnings</span></article>
+        </div>
+      </section>
+
+      <section class="section-heading">
+        <div>
+          <p class="eyebrow">My projects</p>
+          <h3>Live Infrastructure</h3>
+        </div>
+        <button id="refreshButton" class="button secondary">Refresh</button>
+      </section>
+
+      <section id="projectGrid" class="project-grid"></section>
+      <section id="emptyState" class="empty-state">
+        <h3>No project connected yet</h3>
+        <p>Add your first project, copy its key, then run the agent on its server.</p>
+        <button class="button primary" data-open-project>Add First Project</button>
+      </section>
+    </main>
+
+    <dialog id="tokenDialog">
+      <form method="dialog" class="dialog-card">
+        <p class="eyebrow">Dashboard access</p>
+        <h3>Enter Admin Token</h3>
+        <p>The same value used in <code>MONITOR_ADMIN_TOKEN</code>.</p>
+        <input id="adminTokenInput" type="password" placeholder="Admin token" />
+        <div class="dialog-actions">
+          <button value="cancel" class="button secondary">Cancel</button>
+          <button id="saveTokenButton" value="default" class="button primary">Connect</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="projectDialog">
+      <form id="projectForm" class="dialog-card">
+        <p class="eyebrow">New connection</p>
+        <h3>Add Project</h3>
+        <label>
+          Project Name
+          <input name="name" required placeholder="Dr Trivedi Clinic" />
+        </label>
+        <label>
+          Environment
+          <select name="environment">
+            <option>Production</option>
+            <option>Staging</option>
+            <option>Development</option>
+          </select>
+        </label>
+        <label>
+          First Server Name
+          <input name="firstAgentName" placeholder="Production API Server" />
+        </label>
+        <label>
+          Health / API URL
+          <input
+            name="serviceUrl"
+            type="url"
+            placeholder="https://drtrivedi_api.vectre.in/"
+          />
+        </label>
+        <div class="dialog-actions">
+          <button type="button" data-close-project class="button secondary">Cancel</button>
+          <button type="submit" class="button primary">Create Project</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="keyDialog">
+      <div class="dialog-card">
+        <p class="eyebrow">Save this key now</p>
+        <h3>Project Created</h3>
+        <p>This secret key is shown only once. Put it in the target server agent config.</p>
+        <pre id="projectKeyOutput"></pre>
+        <button id="copyKeyButton" class="button primary">Copy Project Key</button>
+        <p class="eyebrow">Agent configuration</p>
+        <pre id="agentConfigOutput"></pre>
+        <button id="copyConfigButton" class="button primary">Copy Agent Config</button>
+        <button data-close-key class="button secondary">Done</button>
+      </div>
+    </dialog>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
