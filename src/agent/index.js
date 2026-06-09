@@ -31,6 +31,12 @@ if (missingFields.length > 0) {
 config.intervalSeconds = Math.max(Number(config.intervalSeconds) || 30, 5);
 config.requestTimeoutMs = Math.max(Number(config.requestTimeoutMs) || 5000, 500);
 config.diskPath = config.diskPath || "/";
+config.projectPath = config.projectPath
+  ? path.resolve(path.dirname(configPath), config.projectPath)
+  : null;
+config.processPorts = Array.isArray(config.processPorts)
+  ? config.processPorts
+  : [];
 
 const sendReport = async () => {
   const payload = await collectMetrics(config);

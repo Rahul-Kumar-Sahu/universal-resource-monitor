@@ -139,7 +139,9 @@ const renderAgent = (agent) => {
   const status = getAgentState(agent);
   const snapshot = agent.latestSnapshot;
   const metrics = snapshot?.metrics || {};
+  const projectMetrics = metrics.project || null;
   const services = snapshot?.services || [];
+  const trackedPorts = projectMetrics?.trackedPorts || [];
   return `
     <section class="agent-card">
       <div class="agent-title">
@@ -147,10 +149,38 @@ const renderAgent = (agent) => {
         <span class="badge ${status}">${status}</span>
       </div>
       <p class="agent-meta">${escapeHtml(metrics.hostname || "Waiting for first report")} · ${relativeTime(agent.lastSeenAt)}</p>
-      <div class="metric-grid">
-        <div class="metric"><strong>${formatPercent(metrics.cpu?.usagePercent)}</strong><span>CPU</span></div>
-        <div class="metric"><strong>${formatPercent(metrics.memory?.usedPercent)}</strong><span>RAM · ${formatBytes(metrics.memory?.usedBytes)}</span></div>
-        <div class="metric"><strong>${formatPercent(metrics.disk?.usedPercent)}</strong><span>Disk · ${formatBytes(metrics.disk?.usedBytes)}</span></div>
+      ${
+        projectMetrics
+          ? `
+            <div class="usage-section project-usage">
+              <div class="usage-heading">
+                <strong>Project usage</strong>
+                <span>${projectMetrics.processCount || 0} process(es)${trackedPorts.length ? ` · port ${trackedPorts.join(", ")}` : ""}</span>
+              </div>
+              <div class="metric-grid">
+                <div class="metric"><strong>${formatPercent(projectMetrics.cpu?.usagePercent)}</strong><span>CPU share · ${formatPercent(projectMetrics.cpu?.activityMonitorPercent)} in Activity Monitor</span></div>
+                <div class="metric"><strong>${formatPercent(projectMetrics.memory?.usedPercent)}</strong><span>RAM · ${formatBytes(projectMetrics.memory?.usedBytes)}</span></div>
+                <div class="metric"><strong>${formatPercent(projectMetrics.disk?.usedPercent)}</strong><span>Project files · ${formatBytes(projectMetrics.disk?.usedBytes)}</span></div>
+              </div>
+              ${
+                projectMetrics.processCount
+                  ? ""
+                  : '<p class="metric-note warning-text">No listening project process found. Check the configured local service port.</p>'
+              }
+            </div>
+          `
+          : '<p class="metric-note warning-text">Project metrics unavailable. Add projectPath and update the agent.</p>'
+      }
+      <div class="usage-section host-usage">
+        <div class="usage-heading">
+          <strong>Mac / host usage</strong>
+          <span>Whole machine</span>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><strong>${formatPercent(metrics.cpu?.usagePercent)}</strong><span>CPU</span></div>
+          <div class="metric"><strong>${formatPercent(metrics.memory?.usedPercent)}</strong><span>RAM · ${formatBytes(metrics.memory?.usedBytes)} / ${formatBytes(metrics.memory?.totalBytes)}</span></div>
+          <div class="metric"><strong>${formatPercent(metrics.disk?.usedPercent)}</strong><span>Disk · ${formatBytes(metrics.disk?.usedBytes)} / ${formatBytes(metrics.disk?.totalBytes)}</span></div>
+        </div>
       </div>
       <div class="service-list">
         ${
@@ -254,6 +284,8 @@ document.querySelector("#projectForm").addEventListener("submit", async (event) 
         intervalSeconds: 30,
         requestTimeoutMs: 5000,
         diskPath: "/",
+        projectPath: "..",
+        processPorts: [],
         services: projectInput.serviceUrl
           ? [
               {

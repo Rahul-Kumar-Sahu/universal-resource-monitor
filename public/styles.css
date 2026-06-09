@@ -252,6 +252,50 @@ main {
   padding: 18px;
 }
 
+.usage-section {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.project-usage {
+  background: rgba(94, 234, 212, 0.05);
+  border-color: rgba(94, 234, 212, 0.22);
+}
+
+.host-usage {
+  background: rgba(142, 164, 189, 0.04);
+}
+
+.usage-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.usage-heading strong {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.usage-heading span,
+.metric-note {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.metric-note {
+  margin: 10px 0 0;
+}
+
+.warning-text {
+  color: var(--amber);
+}
+
 .agent-title {
   display: flex;
   justify-content: space-between;

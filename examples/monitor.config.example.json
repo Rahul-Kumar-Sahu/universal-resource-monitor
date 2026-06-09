@@ -5,6 +5,8 @@
   "intervalSeconds": 30,
   "requestTimeoutMs": 5000,
   "diskPath": "/",
+  "projectPath": "..",
+  "processPorts": [],
   "services": [
     {
       "name": "Application",

@@ -42,6 +42,8 @@ cp examples/monitor.config.example.json monitor.config.json
   "agentName": "Production API Server",
   "intervalSeconds": 30,
   "diskPath": "/",
+  "projectPath": "..",
+  "processPorts": [],
   "services": [
     {
       "name": "Clinic API",
@@ -50,6 +52,13 @@ cp examples/monitor.config.example.json monitor.config.json
   ]
 }
 ```
+
+- `projectPath` agent folder se monitored project ka relative path hai. Agar
+  `monitor-agent` project ke andar hai to `..` use karein.
+- Local `services[].url` ke listening ports se project process automatically
+  detect hota hai. Extra ports ko `processPorts` me add kar sakte hain.
+- Dashboard project process CPU/RAM/folder size ko poore host ke CPU/RAM/disk
+  ke saath alag-alag compare karta hai.
 
 ## 4. Agent Run Karein
 
